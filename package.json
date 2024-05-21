@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "script": "jest --verbose"
+    "test": "jest --verbose"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -24,9 +24,6 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "setupFiles": [
-      "<rootDir>/src/ts/setupTests.ts"
-    ],
     "moduleNameMapper": {
       "\\.(css)$": "<rootDir>/src/ts/__mocks__/styleMock.ts"
     },
