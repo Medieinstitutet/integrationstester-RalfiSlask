@@ -2,19 +2,21 @@ import { moviesMock } from '../__mocks__/moviesMock';
 import * as htmlFunctions from '../htmlFunctions';
 import { IMovie } from '../models/Movie';
 import { handleSubmit } from '../submitFunctions';
-import axios from 'axios';
+import * as movieService from '../services/movieService';
+
+jest.mock('../services/movieService');
 
 describe('#submit functions', () => {
   let createHtmlSpy: jest.SpyInstance<void>;
   let displaySpy: jest.SpyInstance<void>;
-  let mockedAxiosSpy: jest.SpyInstance<Promise<unknown>>;
+  let mockedGetDataSpy: jest.SpyInstance<Promise<unknown>>;
   let movieContainer: HTMLDivElement;
   let movies: IMovie[] = [];
 
   beforeEach(() => {
     movies = [...moviesMock];
     displaySpy = jest.spyOn(htmlFunctions, 'displayNoResult');
-    mockedAxiosSpy = jest.spyOn(axios, 'get');
+    mockedGetDataSpy = jest.spyOn(movieService, 'getData');
     createHtmlSpy = jest.spyOn(htmlFunctions, 'createHtml');
     document.body.innerHTML = `
     <div id="app">
@@ -34,16 +36,12 @@ describe('#submit functions', () => {
 
   afterEach(() => {
     displaySpy.mockReset();
-    mockedAxiosSpy.mockReset();
+    mockedGetDataSpy.mockReset();
     createHtmlSpy.mockReset();
   });
 
   test('if the movies data return an empty array append and show "mocked no search results"', async () => {
-    mockedAxiosSpy.mockResolvedValue({
-      data: {
-        Search: [],
-      },
-    });
+    mockedGetDataSpy.mockResolvedValue([]);
 
     await handleSubmit();
 
@@ -53,11 +51,7 @@ describe('#submit functions', () => {
   });
 
   test('html inside movie-container should be from the moviesMock', async () => {
-    mockedAxiosSpy.mockResolvedValue({
-      data: {
-        Search: movies,
-      },
-    });
+    mockedGetDataSpy.mockResolvedValue(movies);
 
     createHtmlSpy.mockImplementation(
       (movies: IMovie[], movieContainer: HTMLDivElement) => {
@@ -82,10 +76,7 @@ describe('#submit functions', () => {
   });
 
   test('rejected try catch should result in message mocked no search result', async () => {
-    /*     mockedAxiosSpy.mockRejectedValue(new Error('could not fetch')); */
-    mockedAxiosSpy.mockImplementation(() => {
-      return Promise.reject('could not fetch');
-    });
+    mockedGetDataSpy.mockRejectedValue(new Error('could not fetch'));
 
     await handleSubmit();
 
