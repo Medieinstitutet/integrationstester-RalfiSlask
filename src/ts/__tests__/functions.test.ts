@@ -32,7 +32,7 @@ describe('#Sort function', () => {
     ]);
   });
 
-  test('if desc is not provided, default value is true', () => {
+  test('if desc is not provided, default value should be true and the titles in descending order', () => {
     movieSort(movies);
     expect(movies.map((movie) => movie.Title)).toEqual([
       'Alien',
@@ -42,8 +42,12 @@ describe('#Sort function', () => {
     ]);
   });
 
-  test('movies with equal title should maintain order', () => {
+  test('movies with equal titles should maintain order', () => {
     movieSort(movies, descFalse);
+    expect(movies[1].imdbID).toEqual('2');
+    expect(movies[2].imdbID).toEqual('4');
+
+    movieSort(movies, descTrue);
     expect(movies[1].imdbID).toEqual('2');
     expect(movies[2].imdbID).toEqual('4');
   });
