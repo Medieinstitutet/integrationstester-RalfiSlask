@@ -58,7 +58,7 @@ describe('#submit functions', () => {
         movieContainer.innerHTML = '';
         movies.forEach((movie) => {
           const div = document.createElement('div');
-          div.classList.add('movie');
+          div.classList.add('mock-movie');
           div.innerHTML = movie.Title;
           movieContainer.append(div);
         });
@@ -69,8 +69,8 @@ describe('#submit functions', () => {
 
     expect(createHtmlSpy).toHaveBeenCalledWith(movies, movieContainer);
     expect(displaySpy).not.toHaveBeenCalled();
-    movieContainer.querySelectorAll('.movie').forEach((movieEl, index) => {
-      expect(movieEl.classList.contains('movie')).toBeTruthy();
+    movieContainer.querySelectorAll('.mock-movie').forEach((movieEl, index) => {
+      expect(movieEl.classList.contains('mock-movie')).toBeTruthy();
       expect(movieEl.textContent).toBe(movies[index].Title);
     });
   });

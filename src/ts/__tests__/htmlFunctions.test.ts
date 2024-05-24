@@ -29,13 +29,13 @@ describe('#HTML functions', () => {
       if (movieContainer) createHtml(movies, movieContainer);
     });
 
-    test('movies should contain class movie', () => {
+    test('movie elements should contain the class movie', () => {
       const movieElement = document.querySelector('.movie');
 
       expect(movieElement?.classList.contains('movie')).toBeTruthy();
     });
 
-    test('innerHTML should be empty if movie array is empty', () => {
+    test('innerHTML should be empty if the movie array is empty', () => {
       if (movieContainer) {
         // clearing the movie container content manually, createHTML functions does not do this
         movieContainer.innerHTML = '';
