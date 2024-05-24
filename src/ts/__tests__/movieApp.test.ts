@@ -2,6 +2,9 @@ import { init } from '../movieApp';
 import * as functions from '../submitFunctions';
 
 describe('#init', () => {
+  let submitSpy: jest.SpyInstance;
+  let preventSpy: jest.Mock;
+
   beforeEach(() => {
     document.body.innerHTML = `
         <div id="app">
@@ -12,10 +15,15 @@ describe('#init', () => {
           <div id="movie-container"></div>
         </div>
         `;
+    submitSpy = jest.spyOn(functions, 'handleSubmit');
+    preventSpy = jest.fn();
+  });
+
+  afterEach(() => {
+    submitSpy.mockReset();
   });
 
   test('submit should trigger handleSubmit function and prevent default', () => {
-    const submitSpy = jest.spyOn(functions, 'handleSubmit');
     const form = document.getElementById('searchForm') as HTMLFormElement;
 
     init();
@@ -24,13 +32,11 @@ describe('#init', () => {
       cancelable: true,
       bubbles: true,
     });
-    const preventSpy = jest.fn();
+
     submitEvent.preventDefault = preventSpy;
     form.dispatchEvent(submitEvent);
 
     expect(preventSpy).toHaveBeenCalled();
     expect(submitSpy).toHaveBeenCalled();
-
-    submitSpy.mockReset();
   });
 });
